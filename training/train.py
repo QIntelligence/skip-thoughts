@@ -37,10 +37,11 @@ def trainer(X,
             maxlen_w=30,
             optimizer='adam',
             batch_size = 64,
-            saveto='/u/rkiros/research/semhash/models/toy.npz',
-            dictionary='/ais/gobi3/u/rkiros/bookgen/book_dictionary_large.pkl',
+            saveto='wiki_model_auto.npz',
+            dictionary='wiki_dict.pkl',
             saveFreq=1000,
-            reload_=False):
+            reload_=False,
+            autoencode=False):
 
     # Model options
     model_options = {}
@@ -59,6 +60,7 @@ def trainer(X,
     model_options['saveto'] = saveto
     model_options['dictionary'] = dictionary
     model_options['saveFreq'] = saveFreq
+    model_options['autoencode'] = autoencode
     model_options['reload_'] = reload_
 
     print model_options
@@ -138,7 +140,7 @@ def trainer(X,
     print 'Optimization'
 
     # Each sentence in the minibatch have same length (for encoder)
-    trainX = homogeneous_data.grouper(X)
+    trainX = homogeneous_data.grouper(X, autoencode=autoencode)
     train_iter = homogeneous_data.HomogeneousData(trainX, batch_size=batch_size, maxlen=maxlen_w)
 
     uidx = 0

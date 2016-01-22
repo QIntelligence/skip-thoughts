@@ -141,14 +141,17 @@ def prepare_data(seqs_x, seqs_y, seqs_z, worddict, maxlen=None, n_words=20000):
 
     return x, x_mask, y, y_mask, z, z_mask
 
-def grouper(text):
+def grouper(text, autoencode=False):
     """
     Group text into triplets
     """
-    source = text[1:][:-1]
-    forward = text[2:]
-    backward = text[:-2]
-    X = (source, forward, backward)
+    if autoencode:
+        X = (source, source, source)
+    else:
+        source = text[1:][:-1]
+        forward = text[2:]
+        backward = text[:-2]
+        X = (source, forward, backward)
     return X
 
 
